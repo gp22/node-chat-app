@@ -13,8 +13,18 @@ const io = socketIO(server);
 app.use(express.static(publicPath));
 
 // Setup a listener for a connection.
-io.on('connection', (socket) => {
+io.on('connection', function (socket) {
   console.log('new user connected');
+
+  // Emit custom newEmail event we're listening for in the client.
+  socket.emit('newMessage', {
+    from: 'mike@example.com',
+    text: 'Hey, what\'s up?',
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('new message', message);
+  });
 
   socket.on('disconnect', () => {
     console.log('client disconnected');
