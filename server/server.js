@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 
-const { generateMessage } = require('./utils/message');
+const { generateMessage, generateLocationMessage } = require('./utils/message');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 const app = express();
@@ -13,7 +13,7 @@ const io = socketIO(server);
 app.use(express.static(publicPath));
 
 // Setup a listener for a connection.
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
   console.log('new user connected');
 
   // Emit custom newEmail event we're listening for in the client.
@@ -36,6 +36,10 @@ io.on('connection', function (socket) {
     //   text: message.text,
     //   createdAt: new Date().getTime()
     // });
+  });
+
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
   });
 
   socket.on('disconnect', () => {
