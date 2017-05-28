@@ -17,6 +17,30 @@ socket.on('disconnect', () => {
 });
 
 // Setup a custom event listener.
+const messages = document.querySelector('#messages');
 socket.on('newMessage', function (message) {
   console.log('newMessage', message);
+  const li = document.createElement('li');
+  li.textContent = `${message.from}: ${message.text}`;
+  messages.appendChild(li);
+  // console.log(li);
+});
+
+// socket.emit('createMessage', {
+//   from: 'Frank',
+//   text: 'HI'
+// }, function (data) {
+//   console.log('Got it', data);
+// });
+
+const form = document.querySelector('#message-form');
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const text = this.querySelector('[name=message]').value;
+  socket.emit('createMessage', {
+    from: 'User',
+    text
+  }, function () {
+    
+  });
 });
