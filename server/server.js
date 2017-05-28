@@ -17,13 +17,37 @@ io.on('connection', function (socket) {
   console.log('new user connected');
 
   // Emit custom newEmail event we're listening for in the client.
+  // socket.emit('newMessage', {
+  //   from: 'mike@example.com',
+  //   text: 'Hey, what\'s up?',
+  // });
+
   socket.emit('newMessage', {
-    from: 'mike@example.com',
-    text: 'Hey, what\'s up?',
+      from: 'Admin',
+      text: 'Welcome to the chat app',
+      createdAt: new Date().getTime()
+  });
+
+  socket.broadcast.emit('newMessage', {
+      from: 'Admin',
+      text: 'New user joined',
+      createdAt: new Date().getTime()
   });
 
   socket.on('createMessage', (message) => {
-    console.log('new message', message);
+    console.log('createMessage', message);
+    // io.emit emits events to every connection.
+    // io.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
+    // socket.broadcast sends an event to everyone except the sending socket.
+    socket.broadcast.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {

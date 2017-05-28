@@ -6,10 +6,10 @@ socket.on('connect', () => {
   Setup a new event emitter inside of socket.on('connect') so
   we make sure we're connected before emitting the event.
   */
-  socket.emit('createMessage', {
-    from: 'amy',
-    text: 'yes'
-  });
+  // socket.emit('createMessage', {
+  //   from: 'amy',
+  //   text: 'yes'
+  // });
 });
 
 socket.on('disconnect', () => {
