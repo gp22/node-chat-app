@@ -19,9 +19,10 @@ socket.on('disconnect', () => {
 // Setup a custom event listener.
 const messages = document.querySelector('#messages');
 socket.on('newMessage', function (message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a');
   console.log('newMessage', message);
   const li = document.createElement('li');
-  li.textContent = `${message.from}: ${message.text}`;
+  li.textContent = `${message.from} ${formattedTime}: ${message.text}`;
   messages.appendChild(li);
 });
 
@@ -33,11 +34,12 @@ socket.on('newMessage', function (message) {
 // });
 
 socket.on('newLocationMessage', function (message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a');
   const li = document.createElement('li');
   const a = document.createElement('a');
   a.textContent = 'My current location';
   a.setAttribute('target', '_blank');
-  li.textContent = `${message.from}: `;
+  li.textContent = `${message.from} ${formattedTime}: `;
   a.setAttribute('href', message.url);
   li.append(a);
   messages.appendChild(li);
